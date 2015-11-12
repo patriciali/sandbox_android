@@ -9,9 +9,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/text_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <com.formagrid.hellotest.CustomImageView
+        android:id="@+id/image_view"
+        android:layout_width="48dip"
+        android:layout_height="48dip"/>
 
 </RelativeLayout>
