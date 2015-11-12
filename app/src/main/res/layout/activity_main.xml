@@ -12,6 +12,9 @@
     <com.formagrid.hellotest.CustomImageView
         android:id="@+id/image_view"
         android:layout_width="48dip"
-        android:layout_height="48dip"/>
+        android:layout_height="48dip"
+        android:padding="8dip"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="fitCenter"/>
 
 </RelativeLayout>

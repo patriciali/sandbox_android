@@ -41,11 +41,8 @@ public class CustomImageView extends ImageView {
         float xpad = (float) (getPaddingLeft() + getPaddingRight());
         float ypad = (float) (getPaddingTop() + getPaddingBottom());
 
-        float ww = (float) width - xpad;
-        float hh = (float) height - ypad;
-
         // Figure out how big we can make the pie.
-        float diameter = Math.min(ww, hh);
+        float diameter = Math.min(width, height);
 
         mWidth = (float) width;
         mHeight = (float) height;
@@ -55,6 +52,8 @@ public class CustomImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(mWidth/2, mHeight/2, mRadius, mPaint);
+
+        super.onDraw(canvas);
     }
 
 }
