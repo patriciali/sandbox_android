@@ -2,7 +2,6 @@ package com.formagrid.hellotest;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 
 public class HelloActivity extends Activity {
 
@@ -25,10 +24,6 @@ public class HelloActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    public void onClick(View view) {
-        SomeProvider.showFragment(this, R.id.some_unique_id);
     }
 
 }
