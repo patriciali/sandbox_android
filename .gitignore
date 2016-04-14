@@ -30,6 +30,7 @@ proguard/
 .gradle
 /local.properties
 /.idea/workspace.xml
+/.idea/encodings.xml
 /.idea/codeStyleSettings.xml
 /.idea/libraries
 .DS_Store
