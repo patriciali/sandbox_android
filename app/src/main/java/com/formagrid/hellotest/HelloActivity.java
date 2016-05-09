@@ -3,10 +3,12 @@ package com.formagrid.hellotest;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -40,7 +42,7 @@ public class HelloActivity extends Activity {
         super.onResume();
     }
 
-    private static class SpinnerAdapter extends ArrayAdapter<String> {
+    private class SpinnerAdapter extends ArrayAdapter<String> {
 
         private String[] mItems;
 
@@ -56,27 +58,31 @@ public class HelloActivity extends Activity {
 
         @Override
         public int getCount() {
-            return mItems.length + 1;
+            return mItems.length;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, final ViewGroup parent) {
             Context context = parent.getContext();
 
-            boolean isSpecial = position == getCount() - 1;
-            String tag = isSpecial ? "special" : "normal";
-            if (convertView == null || !convertView.getTag().toString().equals(tag)) {
-                if (isSpecial) {
-                    convertView = LayoutInflater.from(context).inflate(R.layout.spinner_special_item, parent, false);
-                    convertView.setTag(tag);
-                } else {
-                    convertView = LayoutInflater.from(context).inflate(R.layout.spinner_item, parent, false);
-                    convertView.setTag(tag);
-                }
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.spinner_item, parent, false);
             }
 
             TextView textView = (TextView) convertView.findViewById(R.id.text_view);
-            textView.setText(isSpecial ? "patricia is the shit" : mItems[position]);
+            textView.setText(mItems[position]);
+
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.image_view);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AnotherActivity.start(HelloActivity.this);
+
+                    View root = parent.getRootView();
+                    root.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+                    root.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
+                }
+            });
 
             return convertView;
         }
