@@ -1,30 +1,70 @@
 package com.formagrid.hellotest;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 public class HelloActivity extends Activity {
 
-    private Spinner mSpinner;
-    private SpinnerAdapter mAdapter;
+    private static final String EXTRA_AUTOLAUNCH_FRAGMENT = "extra_autolaunch_fragment";
+
+    public static void start(Context context, boolean shouldAutolaunchFragment) {
+        Intent intent = new Intent(context, HelloActivity.class);
+        intent.putExtra(EXTRA_AUTOLAUNCH_FRAGMENT, shouldAutolaunchFragment);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSpinner = (Spinner) findViewById(R.id.spinner);
-        mAdapter = new SpinnerAdapter(this);
-        mSpinner.setAdapter(mAdapter);
+        TextView launchFragment = (TextView) findViewById(R.id.launch_fragment_text_view);
+        launchFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment();
+            }
+        });
+
+        TextView launchActivity = (TextView) findViewById(R.id.launch_activity_text_view);
+        launchActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnotherActivity.start(HelloActivity.this);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == AnotherActivity.FRAGMENT_REQUEST_CODE) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                int intResult = extras.getInt(AnotherActivity.EXTRA_INT_EXTRA);
+                if (intResult == AnotherActivity.THREE) {
+                    showFragment();
+                } else {
+                    Log.d("patricia", "wrong intResult " + intResult);
+                }
+            } else {
+                Log.d("patricia", "extras == null");
+            }
+        } else {
+            Log.d("patricia", "wrong request code " + requestCode);
+        }
     }
 
     @Override
@@ -42,56 +82,12 @@ public class HelloActivity extends Activity {
         super.onResume();
     }
 
-    private class SpinnerAdapter extends ArrayAdapter<String> {
-
-        private String[] mItems;
-
-        public SpinnerAdapter(Context context) {
-            super(context, R.layout.spinner_item);
-
-            mItems = new String[]{
-                    "one",
-                    "two",
-                    "three"
-            };
-        }
-
-        @Override
-        public int getCount() {
-            return mItems.length;
-        }
-
-        @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
-            Context context = parent.getContext();
-
-            if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.spinner_item, parent, false);
-            }
-
-            TextView textView = (TextView) convertView.findViewById(R.id.text_view);
-            textView.setText(mItems[position]);
-
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.image_view);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AnotherActivity.start(HelloActivity.this);
-
-                    View root = parent.getRootView();
-                    root.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
-                    root.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
-                }
-            });
-
-            return convertView;
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return this.getView(position, convertView, parent);
-        }
-
+    private void showFragment() {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        HelloFragment fragment = new HelloFragment();
+        transaction.add(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 
 }
