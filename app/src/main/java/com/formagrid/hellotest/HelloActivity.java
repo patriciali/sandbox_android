@@ -1,31 +1,33 @@
 package com.formagrid.hellotest;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 public class HelloActivity extends Activity {
 
-    private RecyclerView mRecyclerView;
-    private MyAdapter mAdapter;
+    public static final String FIRST_TRANSACTION = "first_transaction";
+    public static final String SECOND_TRANSACTION = "second_transaction";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
+        FrameLayout left = (FrameLayout) findViewById(R.id.left);
+        FrameLayout right = (FrameLayout) findViewById(R.id.right);
 
-        mAdapter = new MyAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        FragmentManager manager = getFragmentManager();
+
+        FragmentTransaction firstTransaction = manager.beginTransaction();
+        firstTransaction.add(left.getId(), new FirstFragment(), FIRST_TRANSACTION);
+        firstTransaction.commit();
+
+        FragmentTransaction secondTransaction = manager.beginTransaction();
+        secondTransaction.add(right.getId(), new SecondFragment(), SECOND_TRANSACTION);
+        secondTransaction.commit();
     }
 
     @Override
@@ -41,53 +43,6 @@ public class HelloActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    private static class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            public TextView textView;
-
-            public ViewHolder(TextView view) {
-                super(view);
-
-                textView = view;
-            }
-
-        }
-
-        private String[] mItems;
-
-        public MyAdapter() {
-            mItems = Constants.STRINGS.clone();
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView view = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.textView.setText(mItems[position]);
-
-            holder.textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = holder.getAdapterPosition();
-                    mItems[position] = "Trump";
-                    notifyItemChanged(position);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItems.length;
-        }
-
     }
 
 }
