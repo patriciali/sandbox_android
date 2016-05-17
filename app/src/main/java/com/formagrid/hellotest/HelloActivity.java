@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.widget.FrameLayout;
 
 public class HelloActivity extends Activity {
 
@@ -11,10 +12,20 @@ public class HelloActivity extends Activity {
     private static final String SECOND_TRANSACTION = "second_transaction";
     private static final String SECOND_TRANSACTION_BACKSTACK = "second_transaction_backstack";
 
+    private FrameLayout mLeftContainer;
+    private FrameLayout mRightContainer;
+    private FrameLayout mLeft;
+    private FrameLayout mRight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello);
+
+        mLeftContainer = (FrameLayout) findViewById(R.id.left_container);
+        mRightContainer = (FrameLayout) findViewById(R.id.right_container);
+        mLeft = (FrameLayout) findViewById(R.id.left);
+        mRight = (FrameLayout) findViewById(R.id.right);
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction firstTransaction = manager.beginTransaction();
@@ -23,6 +34,9 @@ public class HelloActivity extends Activity {
     }
 
     public void startSecondFragment(int itemPosition) {
+        mRightContainer.removeView(mLeft);
+        mLeftContainer.addView(mLeft);
+
         FragmentManager manager = getFragmentManager();
         FragmentTransaction secondTransaction = manager.beginTransaction();
         SecondFragment secondFragment = new SecondFragment();
