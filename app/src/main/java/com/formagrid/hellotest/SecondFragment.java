@@ -2,77 +2,59 @@ package com.formagrid.hellotest;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 public class SecondFragment extends Fragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FrameLayout topLevelView = (FrameLayout) inflater.inflate(R.layout.fragment_hello, container, false);
+    private static final String EXTRA_ITEM_INDEX = "extra_item_index";
 
-        RecyclerView recyclerView = (RecyclerView) topLevelView.findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+    private int mItemIndex;
+    private FirstFragment mFirstFragment;
+    private StringWrapper mItem;
 
-        SecondAdapter adapter = new SecondAdapter();
-        recyclerView.setAdapter(adapter);
-
-        return topLevelView;
+    public SecondFragment() {
+        super();
+        setArguments(new Bundle());
     }
 
-    private class SecondAdapter extends RecyclerView.Adapter<SecondAdapter.ViewHolder> {
+    public void safeSetArguments(int itemPosition) {
+        getArguments().putInt(EXTRA_ITEM_INDEX, itemPosition);
+    }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FrameLayout topLevelView = (FrameLayout) inflater.inflate(R.layout.fragment_second, container, false);
 
-            public TextView textView;
+        mItemIndex = getArguments().getInt(EXTRA_ITEM_INDEX);
+        mFirstFragment = (FirstFragment) getActivity().getFragmentManager().findFragmentByTag(HelloActivity.FIRST_TRANSACTION);
+        mItem = mFirstFragment.getItemAtIndex(mItemIndex);
 
-            public ViewHolder(TextView view) {
-                super(view);
+        EditText editText = (EditText) topLevelView.findViewById(R.id.edit_text);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                textView = view;
             }
 
-        }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mItem.string = String.valueOf(s);
+                mFirstFragment.notifyItemAtIndexChanged(mItemIndex);
+            }
 
-        private String[] mItems;
+            @Override
+            public void afterTextChanged(Editable s) {
 
-        public SecondAdapter() {
-            mItems = Constants.STRINGS.clone();
-        }
+            }
+        });
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView view = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.textView.setText(mItems[position]);
-
-            holder.textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirstFragment fragment = (FirstFragment) getActivity().getFragmentManager().findFragmentByTag(HelloActivity.FIRST_TRANSACTION);
-                    int index = holder.getAdapterPosition();
-                    fragment.setStringAtIndex(index, "Trump");
-                    fragment.notifyItemAtIndexChanged(index);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItems.length;
-        }
-
+        return topLevelView;
     }
 
 }

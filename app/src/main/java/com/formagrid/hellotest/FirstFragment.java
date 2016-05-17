@@ -19,7 +19,7 @@ public class FirstFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FrameLayout topLevelView = (FrameLayout) inflater.inflate(R.layout.fragment_hello, container, false);
+        FrameLayout topLevelView = (FrameLayout) inflater.inflate(R.layout.fragment_first, container, false);
 
         RecyclerView recyclerView = (RecyclerView) topLevelView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -32,8 +32,8 @@ public class FirstFragment extends Fragment {
         return topLevelView;
     }
 
-    public void setStringAtIndex(int index, String string) {
-        mAdapter.setStringAtIndex(index, string);
+    public StringWrapper getItemAtIndex(int index) {
+        return mAdapter.getItemAtIndex(index);
     }
 
     public void notifyItemAtIndexChanged(int index) {
@@ -63,8 +63,8 @@ public class FirstFragment extends Fragment {
             }
         }
 
-        public void setStringAtIndex(int index, String string) {
-            mItems.get(index).string = string;
+        public StringWrapper getItemAtIndex(int index) {
+            return mItems.get(index);
         }
 
         @Override
@@ -76,6 +76,15 @@ public class FirstFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.textView.setText(mItems.get(position).string);
+
+            final int itemPosition = holder.getAdapterPosition();
+            holder.textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HelloActivity activity = (HelloActivity) getActivity();
+                    activity.startSecondFragment(itemPosition);
+                }
+            });
         }
 
         @Override
