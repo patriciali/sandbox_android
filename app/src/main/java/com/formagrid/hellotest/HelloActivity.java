@@ -4,18 +4,18 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 
 public class HelloActivity extends Activity {
 
-    public static final String FIRST_TRANSACTION = "first_transaction";
-    private static final String SECOND_TRANSACTION = "second_transaction";
-    private static final String SECOND_TRANSACTION_BACKSTACK = "second_transaction_backstack";
+    private static final String FRAGMENT_TRANSACTION_ID = "first_transaction";
 
     private FrameLayout mLeftContainer;
     private FrameLayout mRightContainer;
-    private FrameLayout mLeft;
-    private FrameLayout mRight;
+    private FrameLayout mFragmentContainer;
+
+    private boolean mIsFragmentOnRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,26 +24,26 @@ public class HelloActivity extends Activity {
 
         mLeftContainer = (FrameLayout) findViewById(R.id.left_container);
         mRightContainer = (FrameLayout) findViewById(R.id.right_container);
-        mLeft = (FrameLayout) findViewById(R.id.left);
-        mRight = (FrameLayout) findViewById(R.id.right);
+        mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction firstTransaction = manager.beginTransaction();
-        firstTransaction.add(R.id.left, new FirstFragment(), FIRST_TRANSACTION);
+        firstTransaction.add(R.id.fragment_container, new FirstFragment(), FRAGMENT_TRANSACTION_ID);
         firstTransaction.commit();
+
+        mIsFragmentOnRight = true;
     }
 
-    public void startSecondFragment(int itemPosition) {
-        mRightContainer.removeView(mLeft);
-        mLeftContainer.addView(mLeft);
+    public void switchContainer(View view) {
+        if (mIsFragmentOnRight) {
+            mRightContainer.removeView(mFragmentContainer);
+            mLeftContainer.addView(mFragmentContainer);
+        } else {
+            mLeftContainer.removeView(mFragmentContainer);
+            mRightContainer.addView(mFragmentContainer);
+        }
 
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction secondTransaction = manager.beginTransaction();
-        SecondFragment secondFragment = new SecondFragment();
-        secondFragment.safeSetArguments(itemPosition);
-        secondTransaction.add(R.id.right, secondFragment, SECOND_TRANSACTION);
-        secondTransaction.addToBackStack(SECOND_TRANSACTION_BACKSTACK);
-        secondTransaction.commit();
+        mIsFragmentOnRight = !mIsFragmentOnRight;
     }
 
     @Override

@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FirstFragment extends Fragment {
 
     private FirstAdapter mAdapter;
@@ -32,14 +29,6 @@ public class FirstFragment extends Fragment {
         return topLevelView;
     }
 
-    public StringWrapper getItemAtIndex(int index) {
-        return mAdapter.getItemAtIndex(index);
-    }
-
-    public void notifyItemAtIndexChanged(int index) {
-        mAdapter.notifyItemChanged(index);
-    }
-
     private class FirstAdapter extends RecyclerView.Adapter<FirstAdapter.ViewHolder> {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,17 +43,10 @@ public class FirstFragment extends Fragment {
 
         }
 
-        private List<StringWrapper> mItems;
+        private String[] mItems;
 
         public FirstAdapter() {
-            mItems = new ArrayList<StringWrapper>();
-            for (String string : Constants.STRINGS) {
-                mItems.add(new StringWrapper(string));
-            }
-        }
-
-        public StringWrapper getItemAtIndex(int index) {
-            return mItems.get(index);
+            mItems = Constants.STRINGS.clone();
         }
 
         @Override
@@ -75,21 +57,21 @@ public class FirstFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.textView.setText(mItems.get(position).string);
+            holder.textView.setText(mItems[position]);
 
             final int itemPosition = holder.getAdapterPosition();
             holder.textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HelloActivity activity = (HelloActivity) getActivity();
-                    activity.startSecondFragment(itemPosition);
+                    mItems[itemPosition] = "Roosevelt";
+                    mAdapter.notifyItemChanged(itemPosition);
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return mItems.size();
+            return mItems.length;
         }
 
     }
