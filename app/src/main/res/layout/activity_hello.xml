@@ -5,10 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_world"
-        android:gravity="center"/>
+    <ImageView
+        android:id="@+id/image_view_top"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_alignParentTop="true"/>
+
+    <ImageView
+        android:id="@+id/image_view_bottom"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_below="@id/image_view_top"/>
 
 </RelativeLayout>
