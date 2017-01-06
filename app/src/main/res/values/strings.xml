@@ -4,5 +4,4 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="switch_fragment_view_parent">Switch parent of fragment\'s container view</string>
 </resources>
