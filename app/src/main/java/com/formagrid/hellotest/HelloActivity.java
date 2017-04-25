@@ -1,32 +1,58 @@
 package com.formagrid.hellotest;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import java.util.ArrayList;
+
+import io.filepicker.Filepicker;
+import io.filepicker.models.FPFile;
 
 public class HelloActivity extends Activity {
 
-    private static final String IMAGE_URL_GOOD = "http://www.desicomments.com/wp-content/uploads/LOL-With-Emoji.jpg";
-    private static final String IMAGE_URL_BAD = "https://forma_app_filepicker_dev-test-staging.s3.amazonaws.com/profilePics%2FGPeekrQMepSJvusaFOng_66.png?sz=36";
+    private TextView mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello);
 
-        ImageView topImageView = (ImageView) findViewById(R.id.image_view_top);
-        ImageView bottomImageView = (ImageView) findViewById(R.id.image_view_bottom);
+        Filepicker.setKey(Secrets.FILEPICKER_DEV_API_KEY);
+        Filepicker.setAppName("patricia is the shit");
 
-        Picasso.with(this)
-                .setLoggingEnabled(true);
-        Picasso.with(this)
-                .load(IMAGE_URL_GOOD)
-                .into(topImageView);
-        Picasso.with(this)
-                .load(IMAGE_URL_BAD)
-                .into(bottomImageView);
+        mButton = (TextView) findViewById(R.id.tap_me);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HelloActivity.this, Filepicker.class);
+                startActivityForResult(intent, Filepicker.REQUEST_CODE_GETFILE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Filepicker.REQUEST_CODE_GETFILE) {
+            if(resultCode == RESULT_OK) {
+                Log.d("patricia", "ok");
+
+                // Filepicker always returns array of FPFile objects
+                ArrayList<FPFile> fpFiles = data.getParcelableArrayListExtra(Filepicker.FPFILES_EXTRA);
+
+                // Option multiple was not set so only 1 object is expected
+                FPFile file = fpFiles.get(0);
+
+                // Do something cool with the result
+            } else {
+                // Handle errors here
+                Log.d("patricia", "!!!!error!!!!");
+            }
+
+        }
     }
 
     @Override
