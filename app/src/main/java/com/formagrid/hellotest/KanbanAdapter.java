@@ -29,19 +29,10 @@ public class KanbanAdapter extends RecyclerView.Adapter<KanbanAdapter.ViewHolder
         super();
         mAdapterList = new ArrayList<KanbanStackAdapter>();
         for (int i = 0; i < NUM_STACKS; i += 1) {
-            List<String> modelItems = new ArrayList<String>();
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
-            modelItems.add(String.valueOf(i+1));
+            List<Row> modelItems = new ArrayList<Row>();
+            modelItems.add(new Row(String.valueOf(i+1)));
+            modelItems.add(new Row(String.valueOf(i+1)));
+            modelItems.add(new Row(String.valueOf(i+1)));
 
             mAdapterList.add(new KanbanStackAdapter(modelItems));
         }
