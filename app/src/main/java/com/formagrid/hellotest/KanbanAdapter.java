@@ -50,6 +50,7 @@ public class KanbanAdapter extends RecyclerView.Adapter<KanbanAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.kanbanStackRecyclerView.setAdapter(mAdapterList.get(position));
+        holder.kanbanStackRecyclerView.setTag(position);
     }
 
     @Override

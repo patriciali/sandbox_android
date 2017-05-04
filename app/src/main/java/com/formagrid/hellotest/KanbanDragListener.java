@@ -10,26 +10,30 @@ public class KanbanDragListener implements View.OnDragListener {
 
     @Override
     public boolean onDrag(View target, DragEvent dragEvent) {
-        View sourceChild = (View) dragEvent.getLocalState();
+        View source = (View) dragEvent.getLocalState();
+        RecyclerView sourceParent = (RecyclerView) source.getParent();
+        int sourcePosition = (int) source.getTag();
+
+        RecyclerView targetParent = (RecyclerView) target.getParent();
+        int targetPosition = (int) target.getTag();
+
+        KanbanStackAdapter sourceParentAdapter = (KanbanStackAdapter) sourceParent.getAdapter();
+        KanbanStackAdapter targetParentAdapter = (KanbanStackAdapter) targetParent.getAdapter();
 
         switch (dragEvent.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
+                int stackIndex = (int) targetParent.getTag();
+                RecyclerView container = (RecyclerView) targetParent.getParent();
+                container.smoothScrollToPosition(stackIndex);
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
                 break;
+            case DragEvent.ACTION_DRAG_LOCATION:
+                break;
             case DragEvent.ACTION_DROP:
                 mIsDropped = true;
-
-                RecyclerView sourceParent = (RecyclerView) sourceChild.getParent();
-                int sourcePosition = (int) sourceChild.getTag();
-
-                RecyclerView targetParent = (RecyclerView) target.getParent();
-                int targetPosition = (int) target.getTag();
-
-                KanbanStackAdapter sourceParentAdapter = (KanbanStackAdapter) sourceParent.getAdapter();
-                KanbanStackAdapter targetParentAdapter = (KanbanStackAdapter) targetParent.getAdapter();
 
                 if (sourceParentAdapter == targetParentAdapter) {
                     targetParentAdapter.onItemMove(sourcePosition, targetPosition);
@@ -43,7 +47,7 @@ public class KanbanDragListener implements View.OnDragListener {
         }
 
         if (!mIsDropped) {
-            sourceChild.setVisibility(View.VISIBLE);
+            source.setVisibility(View.VISIBLE);
         }
 
         return true;
