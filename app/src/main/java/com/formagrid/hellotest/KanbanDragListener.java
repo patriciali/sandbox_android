@@ -30,7 +30,7 @@ public class KanbanDragListener implements View.OnDragListener {
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
-                int stackIndex = ((KanbanAdapter.ViewHolder) targetParent.getTag()).getAdapterPosition();
+                int stackIndex = ((KanbanAdapter.KanbanStackViewHolder) targetParent.getTag()).getAdapterPosition();
                 RecyclerView container = (RecyclerView) targetParent.getParent().getParent(); // TODO HACK
                 container.smoothScrollToPosition(stackIndex);
                 break;

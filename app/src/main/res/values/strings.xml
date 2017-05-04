@@ -2,4 +2,5 @@
     <string name="app_name">HelloTest</string>
 
     <string name="add_card">Add Card</string>
+    <string name="add_stack">Add Stack</string>
 </resources>
