@@ -1,27 +1,34 @@
 package com.formagrid.hellotest;
 
 import android.content.Context;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class KanbanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class KanbanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ReorderOnlyItemTouchHelperCallback.ReorderOnlyItemTouchHelperAdapter {
 
     private static final int TYPE_STACK = 0;
     private static final int TYPE_ADD_STACK = 1;
 
+    private OnStartDragListener mOnStartDragListener;
+
     private List<String> mStackTitles;
     private List<KanbanStackAdapter> mAdapterList;
 
-    public KanbanAdapter() {
+    public KanbanAdapter(OnStartDragListener onStartDragListener) {
         super();
+        mOnStartDragListener = onStartDragListener;
+
         mStackTitles = new ArrayList<String>();
         mStackTitles.add("Diving In");
         mStackTitles.add("Mastering Trello");
@@ -78,6 +85,36 @@ public class KanbanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mStackTitles.size() + 1;
     }
 
+    /**
+     * ReorderOnlyItemTouchHelperCallback.ReorderOnlyItemTouchHelperAdapter
+     */
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        // we don't allow dragging to the "add stack" position
+        if (toPosition == mStackTitles.size()) {
+            return;
+        }
+
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                // TODO we should put mStackTitles and mAdapterList in one list so that we don't have to do this shit
+                Collections.swap(mStackTitles, i, i + 1);
+                Collections.swap(mAdapterList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mStackTitles, i, i - 1);
+                Collections.swap(mAdapterList, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDrop(int fromPosition, int toPosition) {
+        // sync to server
+    }
+
     public class KanbanStackViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title;
@@ -91,6 +128,17 @@ public class KanbanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             kanbanStackRecyclerView.setLayoutManager(new LinearLayoutManager(kanbanStack.getContext(), LinearLayoutManager.VERTICAL, false));
 
             title = (TextView) kanbanStack.findViewById(R.id.title);
+            title.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (MotionEventCompat.getActionMasked(motionEvent) ==
+                            MotionEvent.ACTION_DOWN) {
+                        mOnStartDragListener.onStartDrag(KanbanStackViewHolder.this);
+                    }
+                    return false;
+                }
+            });
+
             addCard = (TextView) kanbanStack.findViewById(R.id.add_card);
             addCard.setOnClickListener(new View.OnClickListener() {
                 @Override
