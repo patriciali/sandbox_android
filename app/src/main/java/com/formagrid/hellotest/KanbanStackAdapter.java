@@ -47,7 +47,7 @@ public class KanbanStackAdapter extends RecyclerView.Adapter<KanbanStackAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textView.setText(mModel.get(position).value);
 
-        holder.itemView.setTag(position);
+        holder.itemView.setTag(holder);
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {

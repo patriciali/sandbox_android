@@ -30,9 +30,11 @@ public class KanbanAdapter extends RecyclerView.Adapter<KanbanAdapter.ViewHolder
         mAdapterList = new ArrayList<KanbanStackAdapter>();
         for (int i = 0; i < NUM_STACKS; i += 1) {
             List<Row> modelItems = new ArrayList<Row>();
-            modelItems.add(new Row(String.valueOf(i+1)));
-            modelItems.add(new Row(String.valueOf(i+1)));
-            modelItems.add(new Row(String.valueOf(i+1)));
+            modelItems.add(new Row("a" + (i+1)));
+            modelItems.add(new Row("b" + (i+1)));
+            modelItems.add(new Row("c" + (i+1)));
+            modelItems.add(new Row("d" + (i+1)));
+            modelItems.add(new Row("e" + (i+1)));
 
             mAdapterList.add(new KanbanStackAdapter(modelItems));
         }
@@ -50,7 +52,7 @@ public class KanbanAdapter extends RecyclerView.Adapter<KanbanAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.kanbanStackRecyclerView.setAdapter(mAdapterList.get(position));
-        holder.kanbanStackRecyclerView.setTag(position);
+        holder.kanbanStackRecyclerView.setTag(holder);
     }
 
     @Override

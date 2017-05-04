@@ -12,10 +12,10 @@ public class KanbanDragListener implements View.OnDragListener {
     public boolean onDrag(View target, DragEvent dragEvent) {
         View source = (View) dragEvent.getLocalState();
         RecyclerView sourceParent = (RecyclerView) source.getParent();
-        int sourcePosition = (int) source.getTag();
+        int sourcePosition = ((KanbanStackAdapter.ViewHolder) source.getTag()).getAdapterPosition();
 
         RecyclerView targetParent = (RecyclerView) target.getParent();
-        int targetPosition = (int) target.getTag();
+        int targetPosition = ((KanbanStackAdapter.ViewHolder) target.getTag()).getAdapterPosition();
 
         KanbanStackAdapter sourceParentAdapter = (KanbanStackAdapter) sourceParent.getAdapter();
         KanbanStackAdapter targetParentAdapter = (KanbanStackAdapter) targetParent.getAdapter();
@@ -24,7 +24,7 @@ public class KanbanDragListener implements View.OnDragListener {
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
-                int stackIndex = (int) targetParent.getTag();
+                int stackIndex = ((KanbanAdapter.ViewHolder) targetParent.getTag()).getAdapterPosition();
                 RecyclerView container = (RecyclerView) targetParent.getParent();
                 container.smoothScrollToPosition(stackIndex);
                 break;
