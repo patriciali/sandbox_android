@@ -69,7 +69,7 @@ public class KanbanStackAdapter extends RecyclerView.Adapter<KanbanStackAdapter.
     }
 
     public void addCardToEnd() {
-        mModel.add(new Row("patricia is the shit"));
+        mModel.add(new Row("patricia is the shit" + mModel.size()));
         notifyItemInserted(mModel.size() - 1);
     }
 
