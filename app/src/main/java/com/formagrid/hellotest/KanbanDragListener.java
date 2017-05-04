@@ -3,6 +3,7 @@ package com.formagrid.hellotest;
 import android.support.v7.widget.RecyclerView;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.ViewParent;
 
 public class KanbanDragListener implements View.OnDragListener {
 
@@ -14,6 +15,11 @@ public class KanbanDragListener implements View.OnDragListener {
         RecyclerView sourceParent = (RecyclerView) source.getParent();
         int sourcePosition = ((KanbanStackAdapter.ViewHolder) source.getTag()).getAdapterPosition();
 
+        ViewParent tempTargetParent = target.getParent();
+        if (!(tempTargetParent instanceof RecyclerView)) {
+            // no-op if the parent isn't instance of RecyclerView
+            return true;
+        }
         RecyclerView targetParent = (RecyclerView) target.getParent();
         int targetPosition = ((KanbanStackAdapter.ViewHolder) target.getTag()).getAdapterPosition();
 
@@ -25,7 +31,7 @@ public class KanbanDragListener implements View.OnDragListener {
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
                 int stackIndex = ((KanbanAdapter.ViewHolder) targetParent.getTag()).getAdapterPosition();
-                RecyclerView container = (RecyclerView) targetParent.getParent();
+                RecyclerView container = (RecyclerView) targetParent.getParent().getParent(); // TODO HACK
                 container.smoothScrollToPosition(stackIndex);
                 break;
             case DragEvent.ACTION_DRAG_EXITED:

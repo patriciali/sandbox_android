@@ -6,7 +6,6 @@ import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ public class KanbanStackAdapter extends RecyclerView.Adapter<KanbanStackAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        CardView cardView = (CardView) LayoutInflater.from(context).inflate(R.layout.kanban_stack_card, parent, false);
+        CardView cardView = (CardView) LayoutInflater.from(context).inflate(R.layout.kanban_card, parent, false);
         return new ViewHolder(cardView);
     }
 
@@ -69,6 +68,12 @@ public class KanbanStackAdapter extends RecyclerView.Adapter<KanbanStackAdapter.
         return mModel.size();
     }
 
+    public void addCardToEnd() {
+        mModel.add(new Row("patricia is the shit"));
+        notifyItemInserted(mModel.size() - 1);
+    }
+
+    // KanbanDragListener methods. TODO should probably be behind an interface
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {

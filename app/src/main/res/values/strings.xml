@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">HelloTest</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="tap_me">Tap me</string>
-
+    <string name="add_card">Add Card</string>
 </resources>
