@@ -32,8 +32,9 @@ public class KanbanAdapter extends RecyclerView.Adapter<KanbanAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     KanbanStackAdapter adapter = mAdapterList.get(ViewHolder.this.getAdapterPosition());
+                    kanbanStackRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                     adapter.addCardToEnd();
-                    kanbanStackRecyclerView.scrollToPosition(adapter.getItemCount());
+                    kanbanStackRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 }
             });
         }
@@ -41,8 +42,8 @@ public class KanbanAdapter extends RecyclerView.Adapter<KanbanAdapter.ViewHolder
     }
 
     private static final String[] STACK_TITLES = new String[]{
-            "Mastering Trello",
             "Diving In",
+            "Mastering Trello",
             "Getting Started",
             "More Info",
     };
