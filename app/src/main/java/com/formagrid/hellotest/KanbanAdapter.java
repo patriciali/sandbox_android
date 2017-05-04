@@ -30,9 +30,9 @@ public class KanbanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mOnStartDragListener = onStartDragListener;
 
         mStackTitles = new ArrayList<String>();
+        mStackTitles.add("Getting Started");
         mStackTitles.add("Diving In");
         mStackTitles.add("Mastering Trello");
-        mStackTitles.add("Getting Started");
         mStackTitles.add("More Info");
 
         mAdapterList = new ArrayList<KanbanStackAdapter>();
@@ -44,6 +44,9 @@ public class KanbanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             modelItems.add(new Row(title + 3));
             modelItems.add(new Row(title + 4));
             modelItems.add(new Row(title + 5));
+            modelItems.add(new Row(title + 6));
+            modelItems.add(new Row(title + 7));
+            modelItems.add(new Row(title + 8));
 
             mAdapterList.add(new KanbanStackAdapter(modelItems));
         }
