@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#ffffff</color>
-    <color name="grey">#cccccc</color>
-    <color name="light_grey">#eeeeee</color>
-    <color name="trello_blue">#0062b3</color>
+    <color name="grey">#777777</color>
     <color name="red">#ff0000</color>
     <color name="purple">#ff00ff</color>
-    <color name="orange">#66ff8000</color>
     <color name="green">#33ff33</color>
+    <color name="yellow">#f4ee42</color>
+    <color name="blue">#425ff4</color>
 </resources>
